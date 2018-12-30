@@ -1,8 +1,9 @@
 import unittest
 from io import StringIO
+from typing import List
+
 from ranked_vote_tools.ballot import Ballot, Candidate, UNDERVOTE, OVERVOTE, WRITE_IN
 from ranked_vote_tools.files import write_ballots_fh
-from typing import List
 
 
 def fh_to_lines(fh: StringIO) -> List[str]:

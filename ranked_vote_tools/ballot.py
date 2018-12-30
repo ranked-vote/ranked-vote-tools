@@ -27,7 +27,7 @@ _choice_registry = {
     '$UNDERVOTE': UNDERVOTE,
     '$OVERVOTE': OVERVOTE,
     '$WRITE_IN': WRITE_IN
-} # type: Dict[str, Choice]
+}  # type: Dict[str, Choice]
 
 
 def parse_choice(choice_str: str):

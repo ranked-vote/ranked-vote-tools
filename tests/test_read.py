@@ -1,5 +1,6 @@
 import unittest
 from io import StringIO
+
 from ranked_vote_tools.ballot import Ballot, Candidate, UNDERVOTE, OVERVOTE, WRITE_IN
 from ranked_vote_tools.files import read_ballots_fh
 
@@ -58,7 +59,6 @@ class TestReadBallots(unittest.TestCase):
 
         with self.assertRaises(StopIteration):
             next(ballots)
-
 
 
 if __name__ == '__main__':

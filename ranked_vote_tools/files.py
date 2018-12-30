@@ -1,8 +1,9 @@
-from typing import Iterator, TextIO
+import gzip
 from csv import DictReader, DictWriter
 from itertools import groupby
+from typing import Iterator, TextIO
 
-from ranked_vote_tools.ballot import Ballot, parse_choice, UNDERVOTE
+from ranked_vote_tools.ballot import Ballot, parse_choice
 
 
 def read_ballots_fh(fh: TextIO) -> Iterator[Ballot]:
@@ -27,8 +28,22 @@ def write_ballots_fh(fh: TextIO, ballots: Iterator[Ballot]):
 
 
 def read_ballots(filename: str) -> Iterator[Ballot]:
-    pass
+    if filename.endswith('.gz'):
+        fh = gzip.open(filename, 'rt')
+    else:
+        fh = open(filename, 'r')
+
+    yield from read_ballots_fh(fh)
+
+    fh.close()
 
 
 def write_ballots(filename: str, ballots: Iterator[Ballot]):
-    pass
+    if filename.endswith('.gz'):
+        fh = gzip.open(filename, 'wt', encoding='UTF-8')
+    else:
+        fh = open(filename, 'w')
+
+    write_ballots_fh(fh, ballots)
+
+    fh.close()
