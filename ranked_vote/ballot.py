@@ -23,22 +23,31 @@ UNDERVOTE = SpecialChoice('$UNDERVOTE')
 OVERVOTE = SpecialChoice('$OVERVOTE')
 WRITE_IN = SpecialChoice('$WRITE_IN')
 
-_choice_registry = {
+_special_choices = {
     '$UNDERVOTE': UNDERVOTE,
     '$OVERVOTE': OVERVOTE,
     '$WRITE_IN': WRITE_IN
 }  # type: Dict[str, Choice]
 
+_candidate_registry = dict() # type: Dict[str, Candidate]
+
 
 def parse_choice(choice_str: str):
-    if choice_str not in _choice_registry:
-        _choice_registry[choice_str] = Candidate(choice_str)
-    return _choice_registry[choice_str]
+    if choice_str in _special_choices:
+        return _special_choices[choice_str]
+    else:
+        return Candidate.get(choice_str)
 
 
 class Candidate(Choice):
     def __init__(self, candidate_id: str):
         self.candidate_id = candidate_id
+
+    @staticmethod
+    def get(name: str) -> 'Candidate':
+        if name not in _candidate_registry:
+            _candidate_registry[name] = Candidate(name)
+        return _candidate_registry[name]
 
     def __repr__(self):
         return 'Candidate {}'.format(self.candidate_id)
