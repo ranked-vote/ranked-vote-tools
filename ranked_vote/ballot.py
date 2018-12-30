@@ -49,6 +49,9 @@ class Candidate(Choice):
             _candidate_registry[name] = Candidate(name)
         return _candidate_registry[name]
 
+    def __hash__(self):
+        return hash(self.candidate_id)
+
     def __repr__(self):
         return 'Candidate {}'.format(self.candidate_id)
 
