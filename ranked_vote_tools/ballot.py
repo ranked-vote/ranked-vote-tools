@@ -12,6 +12,9 @@ class SpecialChoice:
     def __repr__(self):
         return 'Choice: {}'.format(self.choice_id)
 
+    def __str__(self):
+        return self.choice_id
+
     def __eq__(self, other):
         return self is other
 
@@ -39,6 +42,9 @@ class Candidate(Choice):
 
     def __repr__(self):
         return 'Candidate {}'.format(self.candidate_id)
+
+    def __str__(self):
+        return self.candidate_id
 
     def __eq__(self, other):
         if not isinstance(other, Candidate):

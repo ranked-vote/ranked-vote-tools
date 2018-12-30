@@ -9,16 +9,21 @@ def read_ballots_fh(fh: TextIO) -> Iterator[Ballot]:
     reader = DictReader(fh)
 
     for ballot_id, rows in groupby(reader, lambda x: x['ballot_id']):
-        choices = list()
-        last_rank = 1
-        for row in rows:
-            rank = int(row['rank'])
-            while last_rank + 1 < rank:
-                choices.append(UNDERVOTE)
-                last_rank += 1
-            choices.append(parse_choice(row['choice']))
-            last_rank = rank
+        choices = [parse_choice(row['choice']) for row in rows]
         yield Ballot(ballot_id, choices)
+
+
+def write_ballots_fh(fh: TextIO, ballots: Iterator[Ballot]):
+    writer = DictWriter(fh, ['ballot_id', 'rank', 'choice'], lineterminator='\n')
+    writer.writeheader()
+
+    for ballot in ballots:
+        for rank, choice in enumerate(ballot.choices, 1):
+            writer.writerow({
+                'ballot_id': ballot.ballot_id,
+                'rank': rank,
+                'choice': str(choice)
+            })
 
 
 def read_ballots(filename: str) -> Iterator[Ballot]:

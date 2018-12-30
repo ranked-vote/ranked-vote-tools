@@ -59,30 +59,6 @@ class TestReadBallots(unittest.TestCase):
         with self.assertRaises(StopIteration):
             next(ballots)
 
-    def test_implicit_undervote(self):
-        csv_fh = lines_to_fh('ballot_id,rank,choice',
-                             '1,1,A',
-                             '1,3,C',
-                             '2,1,D',
-                             '2,5,F')
-        ballots = read_ballots_fh(csv_fh)
-
-        self.assertEqual(Ballot('1', [
-            Candidate('A'),
-            UNDERVOTE,
-            Candidate('C')
-        ]), next(ballots))
-
-        self.assertEqual(Ballot('2', [
-            Candidate('D'),
-            UNDERVOTE,
-            UNDERVOTE,
-            UNDERVOTE,
-            Candidate('F')
-        ]), next(ballots))
-
-        with self.assertRaises(StopIteration):
-            next(ballots)
 
 
 if __name__ == '__main__':
