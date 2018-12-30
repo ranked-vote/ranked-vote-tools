@@ -2,8 +2,8 @@ import unittest
 from os import path
 from tempfile import TemporaryDirectory
 
-from ranked_vote_tools.ballot import Ballot, Candidate, UNDERVOTE, OVERVOTE, WRITE_IN
-from ranked_vote_tools.files import read_ballots, write_ballots
+from ranked_vote.ballot import Ballot, Candidate, UNDERVOTE, OVERVOTE, WRITE_IN
+from ranked_vote.format import read_ballots, write_ballots
 
 
 class TestRoundTrip(unittest.TestCase):

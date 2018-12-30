@@ -3,7 +3,7 @@ from csv import DictReader, DictWriter
 from itertools import groupby
 from typing import Iterator, TextIO
 
-from ranked_vote_tools.ballot import Ballot, parse_choice
+from ranked_vote.ballot import Ballot, parse_choice
 
 
 def read_ballots_fh(fh: TextIO) -> Iterator[Ballot]:
