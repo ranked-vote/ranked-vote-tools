@@ -1,16 +1,10 @@
-from abc import ABC, abstractmethod
+from typing import Dict, Type
 
-from ranked_vote.ballot import Ballot, Candidate
-from typing import Iterator
+from ranked_vote.methods.base_method import BaseMethod
+from ranked_vote.methods.eager_instant_runoff import EagerInstantRunoff
+from ranked_vote.methods.instant_runoff import InstantRunoff
 
-
-class BaseMethod(ABC):
-    winner: Candidate
-
-    def __init__(self, ballots: Iterator[Ballot]):
-        self.ballots = list(ballots)
-        self.winner = self.tabulate()
-
-    @abstractmethod
-    def tabulate(self) -> Candidate:
-        pass
+METHODS = {
+    'irv': InstantRunoff,
+    'eager_irv': EagerInstantRunoff,
+}  # type: Dict[str, Type[BaseMethod]]

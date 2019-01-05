@@ -9,7 +9,7 @@ class EagerInstantRunoff(InstantRunoff):
         candidates_ranked = iter(k for k, _ in Counter(round_results.candidate_results).most_common())
 
         last_votes = round_results.candidate_results[next(candidates_ranked)]
-        votes_remaining = round_results.total_votes - last_votes
+        votes_remaining = round_results.continuing_ballots - last_votes
 
         eliminated = list()
 

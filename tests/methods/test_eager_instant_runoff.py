@@ -30,20 +30,20 @@ class TestEagerInstantRunoff(TestCase):
         self.assertEqual(CANDIDATE_A, irv.winner)
         self.assertEqual(3, len(irv.rounds))
 
-        self.assertEqual(10, irv.rounds[0].total_votes)
+        self.assertEqual(10, irv.rounds[0].continuing_ballots)
         self.assertEqual(10, irv.rounds[0].total_ballots)
         self.assertEqual(1, irv.rounds[0].round)
-        self.assertEqual([], irv.rounds[0].last_eliminated)
+        self.assertEqual([], irv.rounds[0].eliminated)
 
-        self.assertEqual(9, irv.rounds[1].total_votes)
+        self.assertEqual(9, irv.rounds[1].continuing_ballots)
         self.assertEqual(10, irv.rounds[1].total_ballots)
         self.assertEqual(2, irv.rounds[1].round)
-        self.assertEqual([CANDIDATE_D], irv.rounds[1].last_eliminated)
+        self.assertEqual([CANDIDATE_D], irv.rounds[1].eliminated)
 
-        self.assertEqual(7, irv.rounds[2].total_votes)
+        self.assertEqual(7, irv.rounds[2].continuing_ballots)
         self.assertEqual(10, irv.rounds[2].total_ballots)
         self.assertEqual(3, irv.rounds[2].round)
-        self.assertEqual([CANDIDATE_C], irv.rounds[2].last_eliminated)
+        self.assertEqual([CANDIDATE_C], irv.rounds[2].eliminated)
 
     def test_simple_eager_runoff(self):
         ballots = [
@@ -63,12 +63,12 @@ class TestEagerInstantRunoff(TestCase):
         self.assertEqual(CANDIDATE_B, irv.winner)
         self.assertEqual(2, len(irv.rounds))
 
-        self.assertEqual(10, irv.rounds[0].total_votes)
+        self.assertEqual(10, irv.rounds[0].continuing_ballots)
         self.assertEqual(10, irv.rounds[0].total_ballots)
         self.assertEqual(1, irv.rounds[0].round)
-        self.assertEqual([], irv.rounds[0].last_eliminated)
+        self.assertEqual([], irv.rounds[0].eliminated)
 
-        self.assertEqual(10, irv.rounds[1].total_votes)
+        self.assertEqual(10, irv.rounds[1].continuing_ballots)
         self.assertEqual(10, irv.rounds[1].total_ballots)
         self.assertEqual(2, irv.rounds[1].round)
-        self.assertEqual([CANDIDATE_C, CANDIDATE_D], irv.rounds[1].last_eliminated)
+        self.assertEqual([CANDIDATE_C, CANDIDATE_D], irv.rounds[1].eliminated)

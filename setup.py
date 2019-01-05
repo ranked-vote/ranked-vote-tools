@@ -9,5 +9,10 @@ setup(name='ranked-vote',
       author_email='rcv@paulbutler.org',
       url='https://github.com/ranked-vote/ranked-vote-tools',
       packages=['ranked_vote', 'ranked_vote.format'],
-      python_requires='>3.6'
+      python_requires='>3.6',
+      entry_points={
+          'console_scripts': [
+              'rcv-tabulate = ranked_vote.bin.tabulate_rcv:main'
+          ]
+      }
       )
