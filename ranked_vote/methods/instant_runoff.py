@@ -20,8 +20,8 @@ class RoundResults:
     def bottom_candidate(self) -> Candidate:
         return min(self.candidate_results, key=self.candidate_results.get)
 
-    def __init__(self, round, counts, last_eliminated=None):
-        self.round = round
+    def __init__(self, rnd, counts, last_eliminated=None):
+        self.round = rnd
         self.results = counts
         self.candidate_results = {k: v for k, v in counts.items() if k not in NON_COUNTED_VOTES}
         self.total_ballots = sum(counts.values())
@@ -74,6 +74,6 @@ class InstantRunoff(BaseMethod):
                 for ballot in ballots_to_reallocate:
                     while ballot[0] in all_eliminated_candidates:
                         ballot = ballot[1:]
-                        if ballot == []:
+                        if not ballot:
                             ballot.append(UNDERVOTE)
                     top_choice_to_choices[ballot[0]].append(ballot)

@@ -9,4 +9,5 @@ setup(name='ranked-vote',
       author_email='rcv@paulbutler.org',
       url='https://github.com/ranked-vote/ranked-vote-tools',
       packages=['ranked_vote', 'ranked_vote.format'],
-     )
+      python_requires='>3.6'
+      )

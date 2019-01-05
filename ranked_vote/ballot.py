@@ -34,7 +34,7 @@ _special_choices = {
     '$WRITE_IN': WRITE_IN
 }  # type: Dict[str, Choice]
 
-_candidate_registry = dict() # type: Dict[str, Candidate]
+_candidate_registry = dict()  # type: Dict[str, Candidate]
 
 
 def parse_choice(choice_str: str):

@@ -1,6 +1,6 @@
 import unittest
 
-from ranked_vote.ballot import Ballot, Candidate, UNDERVOTE, OVERVOTE, WRITE_IN, parse_choice
+from ranked_vote.ballot import Candidate, UNDERVOTE, OVERVOTE, WRITE_IN, parse_choice
 
 
 class TestCandidateParse(unittest.TestCase):
