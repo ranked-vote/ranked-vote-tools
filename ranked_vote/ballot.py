@@ -18,10 +18,15 @@ class SpecialChoice:
     def __eq__(self, other):
         return self is other
 
+    def __hash__(self):
+        return hash(self.choice_id)
+
 
 UNDERVOTE = SpecialChoice('$UNDERVOTE')
 OVERVOTE = SpecialChoice('$OVERVOTE')
 WRITE_IN = SpecialChoice('$WRITE_IN')
+
+NON_COUNTED_VOTES = {UNDERVOTE, OVERVOTE}
 
 _special_choices = {
     '$UNDERVOTE': UNDERVOTE,
