@@ -40,6 +40,9 @@ def round_generator():
 class InstantRunoff(BaseMethod):
     rounds: List[RoundResults]
 
+    def eliminate(self, round_results: RoundResults) -> List[Candidate]:
+        return [round_results.bottom_candidate()]
+
     def tabulate(self) -> Candidate:
         self.rounds = list()
 
@@ -48,6 +51,7 @@ class InstantRunoff(BaseMethod):
             top_choice_to_choices[ballot.choices[0]].append(ballot.choices)
 
         last_eliminated = list()
+        all_eliminated_candidates = set()
 
         for rnd in round_generator():
             # Count first choices
@@ -62,13 +66,14 @@ class InstantRunoff(BaseMethod):
                 return winner
 
             # Eliminate bottom choice and redistribute ballots
-            bottom_candidate = round_results.bottom_candidate()
+            last_eliminated = self.eliminate(round_results)
+            all_eliminated_candidates.update(last_eliminated)
 
-            choices = top_choice_to_choices.pop(bottom_candidate)
-            for ballot in choices:
-                ballot = ballot[1:]
-                if ballot == []:
-                    ballot.append(UNDERVOTE)
-                top_choice_to_choices[ballot[0]].append(ballot)
-
-            last_eliminated = [bottom_candidate]
+            for candidate in last_eliminated:
+                ballots_to_reallocate = top_choice_to_choices.pop(candidate)
+                for ballot in ballots_to_reallocate:
+                    while ballot[0] in all_eliminated_candidates:
+                        ballot = ballot[1:]
+                        if ballot == []:
+                            ballot.append(UNDERVOTE)
+                    top_choice_to_choices[ballot[0]].append(ballot)
