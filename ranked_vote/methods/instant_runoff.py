@@ -1,8 +1,8 @@
 from collections import defaultdict, Counter
-from typing import List, Dict
+from typing import List, Dict, Counter as CounterType
 
 from ranked_vote.ballot import Candidate, NON_COUNTED_VOTES, UNDERVOTE
-from ranked_vote.methods import BaseMethod
+from ranked_vote.methods.base_method import BaseMethod
 
 
 class RoundResults:
@@ -42,21 +42,16 @@ class RoundResults:
         }
 
 
-def round_generator():
-    i = 1
-    while True:
-        yield i
-        i += 1
-
-
 class InstantRunoff(BaseMethod):
     rounds: List[RoundResults]
+    candidates: List[Candidate]
 
-    def eliminate(self, round_results: RoundResults) -> List[Candidate]:
+    def _eliminate(self, round_results: RoundResults) -> List[Candidate]:
         return [round_results.bottom_candidate()]
 
-    def tabulate(self) -> Candidate:
+    def _tabulate(self) -> Candidate:
         self.rounds = list()
+        self.candidates = list()
 
         top_choice_to_choices = defaultdict(list)
         for ballot in self.ballots:
@@ -65,10 +60,16 @@ class InstantRunoff(BaseMethod):
         last_eliminated = list()
         all_eliminated_candidates = set()
 
-        for rnd in round_generator():
+        for rnd in range(1, len(self.ballots) + 1):
             # Count first choices
-            counts = {candidate: len(ballots) for candidate, ballots in
-                      top_choice_to_choices.items()}  # type: Dict[Candidate, int]
+            counts = Counter({candidate: len(ballots) for candidate, ballots in
+                              top_choice_to_choices.items()})  # type: CounterType[Candidate, int]
+
+            self.candidates.extend([
+                c for c, _ in counts.most_common() if c not in self.candidates
+                                                      and isinstance(c, Candidate)
+            ])
+
             round_results = RoundResults(rnd, counts, last_eliminated)
             self.rounds.append(round_results)
 
@@ -78,7 +79,7 @@ class InstantRunoff(BaseMethod):
                 return winner
 
             # Eliminate bottom choice and redistribute ballots
-            last_eliminated = self.eliminate(round_results)
+            last_eliminated = self._eliminate(round_results)
             all_eliminated_candidates.update(last_eliminated)
 
             for candidate in last_eliminated:
@@ -89,11 +90,3 @@ class InstantRunoff(BaseMethod):
                         if not ballot:
                             ballot.append(UNDERVOTE)
                     top_choice_to_choices[ballot[0]].append(ballot)
-
-    @property
-    def metadata(self):
-        return {
-            'rounds': [
-                rnd.to_dict() for rnd in self.rounds
-            ]
-        }

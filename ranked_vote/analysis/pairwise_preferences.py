@@ -1,6 +1,7 @@
 from collections import Counter
 from typing import Iterator, List, Tuple, Counter as CounterType, Optional, Dict, Set
 
+from ranked_vote.analysis.pairwise_stat import PairwiseStat
 from ranked_vote.ballot import Ballot, Candidate
 
 
@@ -27,6 +28,20 @@ class PreferenceMatrix:
 
     def preferred(self, c1, c2):
         return self._preferences[(c1, c2)] > self._preferences[(c2, c1)]
+
+    @property
+    def pairwise(self) -> Iterator[PairwiseStat]:
+        for c1 in self._candidates:
+            for c2 in self._candidates:
+                if c1 == c2:
+                    continue
+
+                pref_c1 = self._preferences[(c1, c2)]
+                pref_c2 = self._preferences[(c2, c1)]
+                yield PairwiseStat(c1, c2, pref_c1, pref_c1 + pref_c2)
+
+    def to_dict_list(self) -> List[Dict]:
+        return [ps.to_dict() for ps in self.pairwise]
 
     @property
     def graph(self) -> Dict[Candidate, Set[Candidate]]:

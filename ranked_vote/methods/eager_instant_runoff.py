@@ -6,7 +6,7 @@ from ranked_vote.methods.instant_runoff import InstantRunoff, RoundResults
 
 
 class EagerInstantRunoff(InstantRunoff):
-    def eliminate(self, round_results: RoundResults) -> List[Candidate]:
+    def _eliminate(self, round_results: RoundResults) -> List[Candidate]:
         candidates_ranked = iter(k for k, _ in Counter(round_results.candidate_results).most_common())
 
         last_votes = round_results.candidate_results[next(candidates_ranked)]
