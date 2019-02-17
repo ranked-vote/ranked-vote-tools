@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
+from typing import Iterator, Dict, Any
 
 from ranked_vote.ballot import Ballot, Candidate
-from typing import Iterator, Dict, Any
 
 
 class BaseMethod(ABC):

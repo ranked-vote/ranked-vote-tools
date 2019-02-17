@@ -1,7 +1,8 @@
-from ranked_vote.methods.instant_runoff import InstantRunoff, RoundResults
-from typing import List
-from ranked_vote.ballot import Candidate
 from collections import Counter
+from typing import List
+
+from ranked_vote.ballot import Candidate
+from ranked_vote.methods.instant_runoff import InstantRunoff, RoundResults
 
 
 class EagerInstantRunoff(InstantRunoff):

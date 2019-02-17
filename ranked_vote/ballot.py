@@ -81,3 +81,7 @@ class Ballot:
         if not isinstance(other, Ballot):
             return False
         return (self.ballot_id, self.choices) == (other.ballot_id, other.choices)
+
+    @property
+    def candidate_rank(self) -> List[Candidate]:
+        return [c for c in self.choices if isinstance(c, Candidate)]

@@ -1,8 +1,8 @@
 import argparse
-
-from ranked_vote.methods import METHODS
-from ranked_vote.format import read_ballots
 from json import dumps
+
+from ranked_vote.format import read_ballots
+from ranked_vote.methods import METHODS
 
 
 def run_tabulation(rcv_file, method):
