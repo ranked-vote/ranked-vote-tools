@@ -1,7 +1,7 @@
 from collections import defaultdict, Counter
 from typing import List, Dict, Counter as CounterType
 
-from ranked_vote.ballot import Candidate, NON_COUNTED_VOTES, UNDERVOTE
+from ranked_vote.ballot import Candidate, NON_COUNTED_VOTES, UNDERVOTE, OVERVOTE
 from ranked_vote.methods.base_method import BaseMethod
 
 
@@ -36,7 +36,9 @@ class RoundResults:
             'results': [{
                 'name': str(c),
                 'votes': v
-            } for c, v in self.results.items()],
+            } for c, v in self.results.items() if isinstance(c, Candidate)],
+            'undervote': self.results[UNDERVOTE],
+            'overvote': self.results[OVERVOTE],
             'continuing_ballots': self.continuing_ballots,
             'eliminated': [str(c) for c in self.eliminated]
         }
