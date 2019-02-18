@@ -9,8 +9,8 @@ def run_tabulation(rcv_file, method):
     ballots = read_ballots(rcv_file)
     tabulation = METHODS[method](ballots)
     print('Winner:', tabulation.winner)
-    print('Metadata:')
-    print(dumps(tabulation.metadata, indent=2))
+    print('Rounds:')
+    print(dumps([r.to_dict() for r in tabulation.rounds], indent=2))
 
 
 def main():

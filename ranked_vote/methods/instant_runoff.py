@@ -69,7 +69,7 @@ class InstantRunoff(BaseMethod):
 
             self.candidates.extend([
                 c for c, _ in counts.most_common() if c not in self.candidates
-                                                      and isinstance(c, Candidate)
+                and isinstance(c, Candidate)
             ])
 
             round_results = RoundResults(rnd, counts, last_eliminated)
