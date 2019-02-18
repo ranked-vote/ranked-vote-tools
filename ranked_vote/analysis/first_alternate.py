@@ -2,7 +2,7 @@ from collections import Counter
 from typing import Iterator, Tuple, Counter as CounterType, Dict, List
 
 from ranked_vote.analysis.pairwise_stat import PairwiseStat
-from ranked_vote.ballot import Ballot, Candidate, Choice, UNDERVOTE, OVERVOTE
+from ranked_vote.ballot import Ballot, Candidate, Choice, EXHAUSTED
 
 
 class FirstAlternates:
@@ -18,10 +18,10 @@ class FirstAlternates:
 
         for ballot in ballots:
             first_choice = ballot.choices[0]
-            if len(ballot.choices) > 1 and ballot.choices[1] != OVERVOTE:
+            if len(ballot.choices) > 1 and isinstance(ballot.choices[1], Candidate):
                 second_choice = ballot.choices[1]
             else:
-                second_choice = UNDERVOTE
+                second_choice = EXHAUSTED
 
             if isinstance(first_choice, Candidate):
                 self._first_counts[first_choice] += 1
@@ -29,7 +29,7 @@ class FirstAlternates:
 
     def _pairwise_iter(self):
         for c1 in self._candidates:
-            for c2 in self._candidates:
+            for c2 in self._candidates + [EXHAUSTED]:
                 if c1 == c2:
                     continue
 

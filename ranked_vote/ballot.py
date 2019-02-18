@@ -21,10 +21,10 @@ class SpecialChoice:
     def __hash__(self):
         return hash(self.choice_id)
 
-
 UNDERVOTE = SpecialChoice('$UNDERVOTE')
 OVERVOTE = SpecialChoice('$OVERVOTE')
 WRITE_IN = SpecialChoice('$WRITE_IN')
+EXHAUSTED = SpecialChoice('$EXHAUSTED')
 
 NON_COUNTED_VOTES = {UNDERVOTE, OVERVOTE}
 
@@ -45,14 +45,16 @@ def parse_choice(choice_str: str):
 
 
 class Candidate(Choice):
-    def __init__(self, candidate_id: str):
+    def __init__(self, candidate_id: str, name=None, write_in=False):
         self.candidate_id = candidate_id
+        self.write_in = write_in
+        self.name = name or candidate_id.title()
 
     @staticmethod
-    def get(name: str) -> 'Candidate':
-        if name not in _candidate_registry:
-            _candidate_registry[name] = Candidate(name)
-        return _candidate_registry[name]
+    def get(id: str, name=None, write_in=False) -> 'Candidate':
+        if id not in _candidate_registry:
+            _candidate_registry[id] = Candidate(id, name, write_in)
+        return _candidate_registry[id]
 
     def __hash__(self):
         return hash(self.candidate_id)
@@ -67,6 +69,16 @@ class Candidate(Choice):
         if not isinstance(other, Candidate):
             return False
         return self.candidate_id == other.candidate_id
+
+    def __lt__(self, other):
+        return self.candidate_id < other.candidate_id
+
+    def to_dict(self):
+        return {
+            "id": self.candidate_id,
+            "name": self.name,
+            "write_in": self.write_in
+        }
 
 
 class Ballot:

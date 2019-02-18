@@ -2,7 +2,7 @@ from collections import Counter
 from typing import Tuple, Counter as CounterType, Dict, List
 
 from ranked_vote.analysis.pairwise_stat import PairwiseStat
-from ranked_vote.ballot import Candidate, UNDERVOTE
+from ranked_vote.ballot import Candidate, EXHAUSTED
 from ranked_vote.methods.instant_runoff import InstantRunoff
 
 
@@ -13,7 +13,7 @@ class FinalByFirst:
     _final_candidates: List[Candidate]
 
     def __init__(self, tabulator: InstantRunoff):
-        self._final_candidates = tabulator.rounds[-1].candidates + [UNDERVOTE]
+        self._final_candidates = tabulator.rounds[-1].candidates + [EXHAUSTED]
         self._eliminated_candidates = [c for c in tabulator.candidates if c not in self._final_candidates]
 
         self._first_vote_counts = Counter()
@@ -24,7 +24,7 @@ class FinalByFirst:
             if first_choice not in self._final_candidates:
                 self._first_vote_counts[first_choice] += 1
 
-                second_choice = next((c for c in ballot.choices[1:] if c in self._final_candidates), UNDERVOTE)
+                second_choice = next((c for c in ballot.choices[1:] if c in self._final_candidates), EXHAUSTED)
 
                 self._pair_counts[(first_choice, second_choice)] += 1
 
@@ -39,5 +39,9 @@ class FinalByFirst:
     def pairwise(self):
         return list(self._pairwise_iter())
 
-    def to_dict_list(self) -> List[Dict]:
-        return [ps.to_dict() for ps in self.pairwise]
+    def to_dict(self) -> Dict:
+        return {
+            'finalists': [str(c) for c in self._final_candidates],
+            'eliminated': [str(c) for c in self._eliminated_candidates],
+            'pairs': [ps.to_dict() for ps in self.pairwise]
+        }
